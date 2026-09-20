@@ -12,7 +12,7 @@ async fn main() -> std::io::Result<()> {
         .target(env_logger::Target::Stdout)
         .init();
     let args = crate::args::Args::parse();
-    let checker = Data::new(YtChecker::new(args.urls, args.min_h, args.timeout, args.strategy));
+    let checker = Data::new(YtChecker::new(args.urls, args.min_h, args.timeout, args.v6, args.strategy));
     log::warn!("Service started listen at {}", args.listen);
     HttpServer::new(move || {
         App::new().route(&args.url_handler, web::get().to(check_youtube))

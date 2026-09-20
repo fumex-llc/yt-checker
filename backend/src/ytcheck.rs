@@ -43,16 +43,18 @@ pub struct YtChecker {
     quality: u16,
     timeout: u16,
     url_strategy: Strategy,
+    with_v6: bool,
     last_h: AtomicUsize
 }
 
 impl YtChecker {
-    pub fn new(urls: Vec<String>, quality: u16, timeout: u16, url_strategy: Strategy) -> Self {
+    pub fn new(urls: Vec<String>, quality: u16, timeout: u16, with_v6: bool, url_strategy: Strategy) -> Self {
         Self {
             urls,
             quality,
             timeout,
             url_strategy,
+            with_v6,
             last_h: AtomicUsize::new(0)
         }
     }
@@ -101,11 +103,18 @@ impl YtChecker {
             .find(|addr| addr.is_ipv6())
             .ok_or(YtErr::other("no IPv6 address for {host}"))?;
 
-        let client = Client::builder()
-            .connect_timeout(Duration::from_secs(5))
-            .resolve(host, ipv6)
-            .build()
-            .map_err(YtErr::other)?;
+        let client = if self.with_v6 {
+            Client::builder()
+                .connect_timeout(Duration::from_secs(5))
+                .resolve(host, ipv6)
+                .build()
+                .map_err(YtErr::other)?
+        } else {
+            Client::builder()
+                .connect_timeout(Duration::from_secs(5))
+                .build()
+                .map_err(YtErr::other)?
+        };
 
         let end = Duration::from_secs(self.timeout as u64);
         let start = Instant::now();

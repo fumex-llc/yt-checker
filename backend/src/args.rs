@@ -22,4 +22,6 @@ pub struct Args {
     pub timeout: u16,
     #[arg(short, long, value_enum, default_value_t=Strategy::Random)]
     pub strategy: Strategy,
+    #[arg(short, long, default_value="false")]
+    pub v6: bool,
 }
