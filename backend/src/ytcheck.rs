@@ -27,6 +27,7 @@ async fn build_yt_player(video_id: String, height: u16) -> YtInvoke<std::process
 struct Stats {
     bytes: u64,
     elapsed: Duration,
+    url: String
 }
 
 impl Stats {
@@ -90,7 +91,7 @@ impl YtChecker {
 
     async fn check_youtube(&self) -> YtInvoke<Stats> {
         let video_id = self.get_video_id()?;
-        let video_url = self.get_youtube_stream_url(video_id).await?;
+        let video_url = self.get_youtube_stream_url(video_id.clone()).await?;
 
         let url = Url::parse(&video_url).map_err(YtErr::other)?;
 
@@ -136,7 +137,7 @@ impl YtChecker {
             return Err(YtErr::other("YouTube returned zero bytes"))
         }
 
-        Ok(Stats { bytes, elapsed })
+        Ok(Stats { bytes, elapsed, url: video_id })
     }
 }
 
@@ -144,7 +145,8 @@ pub async fn check_youtube(yt: Data<YtChecker>) -> HttpResponse {
     match yt.check_youtube().await {
         Ok(stats) => {
             log::info!(
-                "YouTube video download OK: {:.2} MiB in {:.2}s ({:.2} Mbps)",
+                "YouTube video `https://www.youtube.com/watch?v={}` download OK: {:.2} MiB in {:.2}s ({:.2} Mbps)",
+                stats.url,
                 stats.bytes as f64 / 1024.0 / 1024.0,
                 stats.elapsed.as_secs_f64(),
                 stats.mbps(),
