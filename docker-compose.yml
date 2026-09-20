@@ -1,8 +1,6 @@
 services:
   ytchecker:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    image: ghcr.io/fumex-llc/yt-checker:latest
 
     command:
       - "--listen"
