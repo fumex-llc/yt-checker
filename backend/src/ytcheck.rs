@@ -15,7 +15,6 @@ const YT_DLP_CMD : &str = "yt-dlp";
 async fn build_yt_player(video_id: String, height: u16) -> YtInvoke<std::process::Output> {
     let height = format!("bestvideo[height<={height}]/bestvideo");
     let url = format!("https://www.youtube.com/watch?v={}", video_id);
-    log::info!("{url}");
     Ok(Command::new(YT_DLP_CMD)
         .args(["--no-playlist", "-f", height.as_str(), "--get-url", "--no-warnings", url.as_str()])
         .stdout(Stdio::piped())
