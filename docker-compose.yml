@@ -1,5 +1,7 @@
 services:
   ytchecker:
+    environment:
+      RUST_LOG: info
     image: ghcr.io/fumex-llc/yt-checker:latest
     command:
       - "--listen"
