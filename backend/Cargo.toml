@@ -1,0 +1,15 @@
+[package]
+name = "ytchecker"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+actix-web = "4.15.0"
+futures-util = "0.3.34"
+tokio = { version = "1.53.1", features = ["full"] }
+reqwest = { version = "0.13.5", features = ["stream"] }
+anyhow = "1.0.104"
+clap = { version = "4.6.1", features = ["derive"] }
+rand = "0.10.3"
+env_logger = "0.11.11"
+log = "0.4.34"

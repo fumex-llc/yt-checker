@@ -1,0 +1,29 @@
+services:
+  ytchecker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
+    command:
+      - "--listen"
+      - "0.0.0.0:1111" #Listen address
+      - "--urls"
+      - "sLHFewlxTkU" #List or videos ID (e.g source video URL https://www.youtube.com/watch?v=sLHFewlxTkU, so ID is sLHFewlxTkU)
+      - "--min-h"
+      - "720" #Minimal download quality
+      - "--timeout"
+      - "10" #Timeout s
+      - "--strategy"
+      - "round-robin" #URL processing strategy
+
+    ports:
+      - "127.0.0.1:1111:1111"
+
+    networks:
+      - yt-net
+
+    restart: unless-stopped
+
+networks:
+  yt-net:
+    enable_ipv6: true
