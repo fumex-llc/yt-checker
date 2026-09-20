@@ -1,7 +1,6 @@
 services:
   ytchecker:
     image: ghcr.io/fumex-llc/yt-checker:latest
-
     command:
       - "--listen"
       - "0.0.0.0:1111" #Listen address
